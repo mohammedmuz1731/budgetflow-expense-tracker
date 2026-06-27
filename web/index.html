@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BudgetFlow – Expense Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- MOBILE SIMULATOR FRAME -->
+  <div class="phone-mockup">
+    
+    <!-- Status Bar Simulator -->
+    <div class="status-bar">
+      <span id="status-time">09:41</span>
+      <div class="right-icons">
+        <!-- Signal Icon -->
+        <svg width="17" height="11" viewBox="0 0 17 11" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="8" width="3" height="3" rx="0.5"/>
+          <rect x="4" y="6" width="3" height="5" rx="0.5"/>
+          <rect x="8" y="4" width="3" height="7" rx="0.5"/>
+          <rect x="12" y="1.5" width="3" height="9.5" rx="0.5"/>
+        </svg>
+        <!-- Wifi Icon -->
+        <svg width="16" height="12" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm-3.955-4.52a5.592 5.592 0 0 1 7.91 0c.264.264.69.264.954 0a.675.675 0 0 0 0-.954 6.942 6.942 0 0 0-9.818 0 .675.675 0 0 0 0 .954c.264.264.69.264.954 0Zm-2.83-2.828a9.589 9.589 0 0 1 13.57 0c.264.264.69.264.954 0a.675.675 0 0 0 0-.954 10.939 10.939 0 0 0-15.478 0 .675.675 0 0 0 0 .954c.264.264.69.264.954 0Z"/>
+        </svg>
+        <!-- Battery Icon -->
+        <svg width="22" height="12" viewBox="0 0 22 12" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.5" y="0.5" width="18" height="11" rx="2.5" fill="none" stroke="currentColor"/>
+          <rect x="2.5" y="2.5" width="14" height="7" rx="1" fill="currentColor"/>
+          <path d="M20 3.5c.828 0 1 .5 1 2.5s-.172 2.5-1 2.5v-5Z" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Active Action Toast Notification -->
+    <div id="app-toast" class="toast">
+      <div class="toast-icon" id="toast-icon"></div>
+      <span id="toast-message">Transaction added successfully</span>
+    </div>
+
+    <!-- APP WRAPPER -->
+    <div class="app-container">
+      
+      <!-- SCREEN CONTENT -->
+      <main class="screen-content" id="main-content">
+        
+        <!-- ==================== SPENDING VIEW ==================== -->
+        <section id="view-spending" class="view active">
+          <div class="app-header">
+            <h1 class="app-title">BudgetFlow</h1>
+            <span style="font-size: 13px; font-weight: 700; color: var(--text-secondary);" id="greeting-lbl">Hey there!</span>
+          </div>
+
+          <!-- Month Selector -->
+          <div class="month-selector">
+            <button class="month-btn" id="prev-month" aria-label="Previous Month">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <span class="current-month-label" id="current-month-display">June 2026</span>
+            <button class="month-btn" id="next-month" aria-label="Next Month">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <!-- Balance Card -->
+          <div class="balance-card">
+            <div class="label">Total Balance</div>
+            <div class="amount" id="balance-amount">$0.00</div>
+            
+            <div class="balance-details">
+              <div>
+                <div class="balance-sub-label">Income</div>
+                <div class="balance-sub-value" id="income-amount">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color: #34d399;"><path d="m19 12-7-7-7 7"/><path d="M12 5v14"/></svg>
+                  $0.00
+                </div>
+              </div>
+              <div>
+                <div class="balance-sub-label">Expenses</div>
+                <div class="balance-sub-value" id="expense-amount">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color: #fb7185;"><path d="m5 12 7 7 7-7"/><path d="M12 5v14"/></svg>
+                  $0.00
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Quick Actions: Add Expense / Add Income -->
+          <div class="action-buttons">
+            <button class="action-btn expense" id="btn-add-expense">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Expense
+            </button>
+            <button class="action-btn income" id="btn-add-income">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Income
+            </button>
+          </div>
+
+          <!-- Recent Transactions list -->
+          <div class="section-title">
+            <span>Recent Transactions</span>
+            <a class="section-link" id="link-see-all">See All</a>
+          </div>
+
+          <div class="transaction-list" id="spending-tx-list">
+            <!-- Dynamic elements will be inserted here -->
+          </div>
+        </section>
+
+        <!-- ==================== TRANSACTIONS VIEW ==================== -->
+        <section id="view-transactions" class="view">
+          <div class="app-header">
+            <h1 class="app-title">Transactions</h1>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="search-filter-bar">
+            <div class="search-input-wrapper">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" class="search-input" id="search-tx" placeholder="Search description...">
+            </div>
+            
+            <div class="filter-chips">
+              <span class="filter-chip active" data-filter="all">All</span>
+              <span class="filter-chip" data-filter="income">Income</span>
+              <span class="filter-chip" data-filter="expense">Expenses</span>
+            </div>
+          </div>
+
+          <!-- Full List -->
+          <div class="transaction-list" id="full-tx-list">
+            <!-- Dynamic list will be rendered here -->
+          </div>
+        </section>
+
+        <!-- ==================== CATEGORIES VIEW ==================== -->
+        <section id="view-categories" class="view">
+          <div class="app-header">
+            <h1 class="app-title">Categories</h1>
+          </div>
+
+          <!-- Category Spending Progress Bars -->
+          <div class="category-summary-list" id="category-summary-container">
+            <!-- Dynamic progress bars -->
+          </div>
+
+          <!-- Category Management -->
+          <div class="category-manager">
+            <h3>Add Custom Category</h3>
+            <form class="category-form" id="new-category-form">
+              <div class="form-group">
+                <label for="new-cat-name">Category Name</label>
+                <input type="text" class="form-control" id="new-cat-name" placeholder="e.g. Health, Gift" required>
+              </div>
+              <div class="form-group">
+                <label for="new-cat-budget">Monthly Limit / Budget</label>
+                <input type="number" class="form-control" id="new-cat-budget" placeholder="e.g. 200" min="0">
+              </div>
+              <div class="form-group color-picker-group">
+                <span class="color-picker-label">Color Theme</span>
+                <div class="color-options" id="color-options-wrapper">
+                  <div class="color-option selected" style="background-color: #6366f1;" data-color="#6366f1"></div>
+                  <div class="color-option" style="background-color: #3b82f6;" data-color="#3b82f6"></div>
+                  <div class="color-option" style="background-color: #10b981;" data-color="#10b981"></div>
+                  <div class="color-option" style="background-color: #f59e0b;" data-color="#f59e0b"></div>
+                  <div class="color-option" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                  <div class="color-option" style="background-color: #ec4899;" data-color="#ec4899"></div>
+                </div>
+              </div>
+              <button type="submit" class="btn-submit">Add Category</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ==================== SETTINGS VIEW ==================== -->
+        <section id="view-settings" class="view">
+          <div class="app-header">
+            <h1 class="app-title">Settings</h1>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-title">Preferences</div>
+            <div class="settings-card">
+              
+              <!-- Dark Mode Switch -->
+              <div class="settings-item">
+                <div class="settings-item-info">
+                  <div class="settings-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                  </div>
+                  <span class="settings-item-title">Dark Mode</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="theme-toggle">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <!-- Currency Switcher -->
+              <div class="settings-item">
+                <div class="settings-item-info">
+                  <div class="settings-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  </div>
+                  <span class="settings-item-title">Currency</span>
+                </div>
+                <select class="settings-select" id="currency-select">
+                  <option value="$">USD ($)</option>
+                  <option value="€">EUR (€)</option>
+                  <option value="£">GBP (£)</option>
+                  <option value="₨">INR (₨)</option>
+                  <option value="¥">JPY (¥)</option>
+                  <option value="₺">TRY (₺)</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-title">Data Actions</div>
+            <button class="btn-danger-action" id="btn-clear-data">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+              Reset All Application Data
+            </button>
+          </div>
+
+          <div class="settings-group" style="text-align: center; color: var(--text-muted); font-size: 11px; margin-top: 40px; font-weight: 500;">
+            <p>BudgetFlow v1.0.0</p>
+            <p style="margin-top: 4px;">Crafted for mobile & web</p>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- BOTTOM NAVIGATION BAR -->
+      <nav class="bottom-nav">
+        <!-- Floating Active Tab Indicator background -->
+        <div class="nav-indicator" id="nav-indicator"></div>
+
+        <button class="nav-item active" data-tab="spending" id="nav-btn-spending">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Spending
+        </button>
+        <button class="nav-item" data-tab="transactions" id="nav-btn-transactions">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          Transactions
+        </button>
+        <button class="nav-item" data-tab="categories" id="nav-btn-categories">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-18v18M2 12h20"/></svg>
+          Categories
+        </button>
+        <button class="nav-item" data-tab="settings" id="nav-btn-settings">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </nav>
+
+    </div> <!-- /app-container -->
+
+    <!-- BOTTOM SHEET MODAL (FOR ADDING TRANSACTION) -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="bottom-sheet" id="transaction-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 class="sheet-title" id="sheet-action-title">Add Expense</h2>
+        <button class="sheet-close" id="btn-close-sheet" aria-label="Close sheet">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form class="sheet-form" id="transaction-form">
+        <!-- Dynamic Category/Type Hidden Tracker -->
+        <input type="hidden" id="tx-type" value="expense">
+
+        <!-- Cash input amount -->
+        <div class="amount-input-container">
+          <span class="amount-currency" id="amount-currency-label">$</span>
+          <input type="number" step="0.01" class="amount-field" id="tx-amount" placeholder="0.00" min="0.01" required>
+        </div>
+
+        <!-- Category Grid Selection -->
+        <div class="form-group">
+          <label>Select Category</label>
+          <div class="category-picker-grid" id="category-picker-grid">
+            <!-- Dynamic elements matching spending/income classification -->
+          </div>
+        </div>
+
+        <!-- Date Selection -->
+        <div class="form-group">
+          <label for="tx-date">Date</label>
+          <input type="date" class="form-control" id="tx-date" required>
+        </div>
+
+        <!-- Description Selection -->
+        <div class="form-group">
+          <label for="tx-desc">Description / Note</label>
+          <input type="text" class="form-control" id="tx-desc" placeholder="e.g. Groceries, Dinner with friends" required>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-save-transaction">Add Transaction</button>
+      </form>
+    </div>
+
+  </div> <!-- /phone-mockup -->
+
+  <script src="app.js"></script>
+</body>
+</html>
