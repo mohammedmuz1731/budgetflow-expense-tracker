@@ -1,4 +1,4 @@
-# BudgetFlow – Expense Tracker
+# BudgetFlow – Expense Tracker.
 
 A mobile expense tracker built with Expo / React Native. Track income and expenses by category, visualise monthly spending, manage budgets, and toggle dark mode — all data stored locally on device.
 
